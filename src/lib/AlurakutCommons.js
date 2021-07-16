@@ -54,7 +54,7 @@ export function AlurakutMenu({ githubUser }) {
 }
 AlurakutMenu.Wrapper = styled.header`
   width: 100%;
-  background-color: #308BC5;
+  background-color: #c53030;
   .alurakutMenuProfileSidebar {
     background: white;
     position: fixed;
@@ -80,7 +80,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
     .boxLink {
       font-size: 18px;
-      color: #2E7BB4;
+      color: #b42e2e;
       -webkit-text-decoration: none;
       text-decoration: none;
       font-weight: 800;
@@ -93,7 +93,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
   }
   .container {
-    background-color: #308BC5;
+    background-color: #c53030;
     padding: 7px 16px;
     max-width: 1110px;
     margin: auto;
@@ -126,7 +126,7 @@ AlurakutMenu.Wrapper = styled.header`
         text-decoration: none;
         &:after {
           content: " ";
-          background-color: #5292C1;
+          background-color: #c15252;
           display: block;
           position: absolute;
           width: 1px;
@@ -140,7 +140,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
     input {
       color: #ffffff;
-      background: #5579A1;
+      background: #a15555;
       padding: 10px 42px;
       border: 0;
       background-image: url(${`${BASE_URL}/icons/search.svg`});
@@ -222,7 +222,7 @@ export function AlurakutProfileSidebarMenuDefault() {
 AlurakutProfileSidebarMenuDefault.Wrapper = styled.div`
   a {
     font-size: 12px;
-    color: #2E7BB4;
+    color: #b42e2e;
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -320,13 +320,13 @@ OrkutNostalgicIconSet.List = styled.ul`
 // ================================================================================================================
 const AlurakutLoginScreen = css`
   :root {
-    --backgroundPrimary: #D9E6F6;
-    --backgroundSecondary: #F1F9FE;
+    --backgroundPrimary: #f6d9d9;
+    --backgroundSecondary: #fef1f1;
     --backgroundTertiary: #FFFFFF;
-    --backgroundQuarternary: #BBCDE8;
-    --colorPrimary: #2E7BB4;
-    --colorSecondary: #388BB0;
-    --colorTertiary: #2F4A71;
+    --backgroundQuarternary: #e8bbbb;
+    --colorPrimary: #b42e2e;
+    --colorSecondary: #b03838;
+    --colorTertiary: #712f2f;
     --colorQuarternary: #D81D99;
     --textPrimaryColor: #333333;
     --textSecondaryColor: #FFFFFF;
