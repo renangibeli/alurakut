@@ -50,16 +50,12 @@ function ProfileRelationsBox(props){
 export default function Home() {
   const githubUser = 'renangibeli'
   const favoritePersons = ['juunegreiros', 'peas', 'omariosouto', 'rafaballerini', 'marcobrunodev', 'felipefialho']
-  const [communitys, setCommunitys] = useState([{
-    id: '445646',
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-  }])
 
-
+  const [communitys, setCommunitys] = useState([])
   const [followers, setFollowers] = useState([])
+  const [following, setFollowing] = useState([])
 
-  useEffect(function(){
+  useEffect(() => {
     fetch(`https://api.github.com/users/${githubUser}/followers`)
     .then(function (response){
       return response.json()
@@ -67,6 +63,39 @@ export default function Home() {
     .then(function(completeResponse){
       setFollowers(completeResponse)
     })
+
+    fetch(`https://api.github.com/users/${githubUser}/following`)
+    .then(function (response){
+      return response.json()
+    })
+    .then(function(completeResponse){
+      setFollowing(completeResponse)
+    })
+
+
+    //API GraphQL
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '09310af95dbbfc640b10f9090edcee',
+        'Content-Type' : 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({"query" : `query {
+        allCommunities {
+          title
+          id
+          imageUrl
+          creatorSlug
+        }
+      }`})
+    })
+    .then((response) => response.json())
+    .then((completeResponse) => {
+      const datoCommunitys = completeResponse.data.allCommunities
+      setCommunitys(datoCommunitys)
+    })
+
   }, [])
 
   return (
@@ -95,16 +124,27 @@ export default function Home() {
 
               const formData = new FormData(e.target)
               const newCommunity = {
-                id: new Date().toISOString(),
-                title: formData.get('title'),
-                image: formData.get('image')
+                // id: new Date().toISOString(),
+                  title: formData.get('title'),
+                  imageUrl: formData.get('image'),
+                  creatorSlug: githubUser
               }
 
-              const attComunitys = [...communitys, newCommunity]
-              setCommunitys(attComunitys)
-        
-              
+              fetch('/api/communitys', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newCommunity)
+              })
+              .then(async (res) => {
+                const data = await res.json()
+                const newCommunity = data.record
+                const attComunitys = [...communitys, newCommunity]
+                setCommunitys(attComunitys)
+              })
             }}>
+
               <div>
                 <input 
                 placeholder="Qual vai ser o nome da sua comunidade?"
@@ -139,8 +179,8 @@ export default function Home() {
               {communitys.map((community) => {
                 return (
                   <li key={community.id}>
-                    <a href={`/users/${community.title}`}>
-                      <img src={community.image} />
+                    <a href={`/comunidades/${community.id}`}>
+                      <img src={community.imageUrl} />
                       <span>{community.title}</span>
                     </a>
                   </li>
@@ -149,25 +189,9 @@ export default function Home() {
               })}
             </ul>
           </ProfileRelationsBoxWrapper>
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Pessoas da comunidade ({favoritePersons.length})
-            </h2>
 
-            <ul>
-              {favoritePersons.map((person) => {
-                return (
-                  <li key={person}>
-                    <a href={`/users/${person}`}>
-                      <img src={`https://github.com/${person}.png`} />
-                      <span>{person}</span>
-                    </a>
-                  </li>
+          <ProfileRelationsBox title='Seguindo' items={following}/>
 
-                )
-              })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
         </div>
       </MainGrid>
     </>
