@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import MainGrid from "../src/components/MainGrid"
 import Box from "../src/components/Box"
 import {ProfileRelationsBoxWrapper} from '../src/components/ProfileRelations'
@@ -23,6 +23,30 @@ function ProfileSideBar(props){
   )
 }
 
+function ProfileRelationsBox(props){
+  return(
+    <ProfileRelationsBoxWrapper>
+    <h2 className="smallTitle">
+        {props.title}  ({props.items.length})
+    </h2>
+
+    <ul>
+      {props.items.map(item => {
+        return (
+          <li key={item.id}>
+            <a href={`/users/${item.html_url}`}>
+              <img src={item.avatar_url} />
+              <span>{item.login}</span>
+            </a>
+          </li>
+
+        )
+      })}
+    </ul>
+  </ProfileRelationsBoxWrapper>
+  )
+}
+
 export default function Home() {
   const githubUser = 'renangibeli'
   const favoritePersons = ['juunegreiros', 'peas', 'omariosouto', 'rafaballerini', 'marcobrunodev', 'felipefialho']
@@ -31,6 +55,19 @@ export default function Home() {
     title: 'Eu odeio acordar cedo',
     image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
   }])
+
+
+  const [followers, setFollowers] = useState([])
+
+  useEffect(function(){
+    fetch(`https://api.github.com/users/${githubUser}/followers`)
+    .then(function (response){
+      return response.json()
+    })
+    .then(function(completeResponse){
+      setFollowers(completeResponse)
+    })
+  }, [])
 
   return (
     <>
@@ -92,6 +129,7 @@ export default function Home() {
         </div>
 
         <div className="profileRelationsArea" style={{gridArea: 'profileRelationsArea'}}>
+          <ProfileRelationsBox title='Seguidores' items={followers}/>
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
                 Comunidades  ({communitys.length})
